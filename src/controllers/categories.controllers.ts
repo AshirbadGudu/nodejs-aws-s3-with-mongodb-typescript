@@ -1,10 +1,14 @@
 import { RequestHandler } from "../types";
+import multer from "multer";
+import { Category } from "../models";
 
 const GetAll: RequestHandler = async (req, res) => {
   try {
+    const categories = await Category.find({});
     res.status(200).json({
       msg: "Success",
       isSuccess: true,
+      data: categories,
     });
   } catch (error) {
     // If any other error happens handle here
@@ -14,6 +18,12 @@ const GetAll: RequestHandler = async (req, res) => {
 };
 const Create: RequestHandler = async (req, res) => {
   try {
+    console.log(req.body);
+    console.log(req.file);
+    res.status(201).json({
+      msg: "Created Successfully",
+      isSuccess: true,
+    });
   } catch (error) {
     // If any other error happens handle here
     const msg =
