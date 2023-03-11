@@ -1,4 +1,9 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import configs from "../configs";
 
 const AWS_S3 = new S3Client({
@@ -27,4 +32,12 @@ export const uploadFile = async ({
     ContentType: mimetype,
   });
   await AWS_S3.send(cmd);
+};
+export const getFileURL = async (filename: string) => {
+  const cmd = new GetObjectCommand({
+    Bucket: configs.BUCKET_NAME,
+    Key: filename,
+  });
+  const url = await getSignedUrl(AWS_S3, cmd, { expiresIn: 3600 });
+  return url;
 };

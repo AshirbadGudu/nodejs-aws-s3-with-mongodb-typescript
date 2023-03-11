@@ -1,10 +1,15 @@
 import { RequestHandler } from "../types";
-import { Category } from "../models";
-import { uploadFile } from "../helpers";
+import { Category, ICategory } from "../models";
+import { getFileURL, uploadFile } from "../helpers";
 
 const GetAll: RequestHandler = async (req, res) => {
   try {
-    const categories = await Category.find({});
+    let categories = [];
+    const categoriesWithOutURL = await Category.find({}).lean();
+    for (const category of categoriesWithOutURL) {
+      const image = await getFileURL(category.image);
+      categories.push({ ...category, image });
+    }
     res.status(200).json({
       msg: "Success",
       isSuccess: true,
@@ -24,14 +29,21 @@ const Create: RequestHandler = async (req, res) => {
         msg: "Please select a file for upload",
         isSuccess: false,
       });
+    const imageName = `${Date.now()}-${file.originalname}`;
     await uploadFile({
       buffer: file.buffer,
-      filename: `${Date.now()}-${file.originalname}`,
+      filename: imageName,
       mimetype: file.mimetype,
     });
+    const image = await getFileURL(imageName);
+    const category = await new Category({
+      name: req.body.name,
+      image,
+    }).save();
     res.status(201).json({
       msg: "Created Successfully",
       isSuccess: true,
+      data: category,
     });
   } catch (error) {
     // If any other error happens handle here
