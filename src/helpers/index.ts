@@ -1,3 +1,4 @@
+export * from "./aws.helper";
 import type { Express } from "express";
 import { readdir, readFileSync } from "fs";
 import http from "http";

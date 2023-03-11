@@ -1,6 +1,6 @@
 import { RequestHandler } from "../types";
-import multer from "multer";
 import { Category } from "../models";
+import { uploadFile } from "../helpers";
 
 const GetAll: RequestHandler = async (req, res) => {
   try {
@@ -18,8 +18,17 @@ const GetAll: RequestHandler = async (req, res) => {
 };
 const Create: RequestHandler = async (req, res) => {
   try {
-    console.log(req.body);
-    console.log(req.file);
+    const { file } = req;
+    if (!file)
+      return res.status(400).json({
+        msg: "Please select a file for upload",
+        isSuccess: false,
+      });
+    await uploadFile({
+      buffer: file.buffer,
+      filename: `${Date.now()}-${file.originalname}`,
+      mimetype: file.mimetype,
+    });
     res.status(201).json({
       msg: "Created Successfully",
       isSuccess: true,
