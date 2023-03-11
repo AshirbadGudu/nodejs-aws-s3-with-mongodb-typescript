@@ -1,6 +1,6 @@
 import { RequestHandler } from "../types";
-import { Category, ICategory } from "../models";
-import { getFileURL, uploadFile } from "../helpers";
+import { Category } from "../models";
+import { deleteFile, getFileURL, uploadFile } from "../helpers";
 
 const GetAll: RequestHandler = async (req, res) => {
   try {
@@ -35,11 +35,11 @@ const Create: RequestHandler = async (req, res) => {
       filename: imageName,
       mimetype: file.mimetype,
     });
-    const image = await getFileURL(imageName);
     const category = await new Category({
       name: req.body.name,
-      image,
+      image: imageName,
     }).save();
+    console.log(category);
     res.status(201).json({
       msg: "Created Successfully",
       isSuccess: true,
@@ -54,6 +54,22 @@ const Create: RequestHandler = async (req, res) => {
 };
 const Update: RequestHandler = async (req, res) => {
   try {
+    const { _id } = req.params;
+    const name = req.body.name;
+    const { file } = req;
+    const category = await Category.findById(_id);
+    if (file) {
+      await uploadFile({
+        buffer: file.buffer,
+        filename: category?.image!,
+        mimetype: file.mimetype,
+      });
+    }
+    await category?.updateOne({ name }, { new: true });
+    res.status(201).json({
+      msg: "Updated Successfully",
+      isSuccess: true,
+    });
   } catch (error) {
     // If any other error happens handle here
     const msg =
@@ -63,6 +79,15 @@ const Update: RequestHandler = async (req, res) => {
 };
 const Delete: RequestHandler = async (req, res) => {
   try {
+    const { _id } = req.params;
+    const category = await Category.findById(_id);
+    await deleteFile(category?.image!);
+    console.log(category?.image);
+    await category?.deleteOne();
+    res.status(200).json({
+      msg: "Deleted Successfully",
+      isSuccess: true,
+    });
   } catch (error) {
     // If any other error happens handle here
     const msg =

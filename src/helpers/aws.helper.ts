@@ -1,4 +1,5 @@
 import {
+  DeleteObjectCommand,
   GetObjectCommand,
   PutObjectCommand,
   S3Client,
@@ -40,4 +41,11 @@ export const getFileURL = async (filename: string) => {
   });
   const url = await getSignedUrl(AWS_S3, cmd, { expiresIn: 3600 });
   return url;
+};
+export const deleteFile = async (filename: string) => {
+  const cmd = new DeleteObjectCommand({
+    Bucket: configs.BUCKET_NAME,
+    Key: filename,
+  });
+  await AWS_S3.send(cmd);
 };
