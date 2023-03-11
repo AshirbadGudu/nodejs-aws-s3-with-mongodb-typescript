@@ -68,3 +68,24 @@ touch tsconfig.json
   }
 }
 ```
+
+### Create a proper folder structure
+
+> Create Folders
+
+```sh
+mkdir -p src/{configs,controllers,helpers,middleware,models,routes,types,validations}
+```
+
+> Create `index.ts` files
+
+```sh
+touch  src/index.ts
+touch  src/configs/index.ts
+touch  src/controllers/index.ts
+touch  src/helpers/index.ts
+touch  src/middleware/index.ts
+touch  src/models/index.ts
+touch  src/types/index.ts
+touch  src/validations/index.ts
+```
