@@ -93,6 +93,6 @@ touch  src/validations/index.ts
 ### Add required dependencies and dev dependencies
 
 ```sh
-yarn add aws-sdk cors dotenv express express-validator mongoose multer
+yarn add @aws-sdk/client-s3 cors dotenv express express-validator mongoose multer
 yarn add -D @types/cors @types/express @types/multer
 ```
