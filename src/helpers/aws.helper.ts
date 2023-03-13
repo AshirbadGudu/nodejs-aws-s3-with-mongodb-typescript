@@ -35,12 +35,12 @@ export const uploadFile = async ({
   await AWS_S3.send(cmd);
 };
 export const getFileURL = async (filename: string) => {
-  const cmd = new GetObjectCommand({
-    Bucket: configs.BUCKET_NAME,
-    Key: filename,
-  });
-  const url = await getSignedUrl(AWS_S3, cmd, { expiresIn: 3600 });
-  return url;
+  // const cmd = new GetObjectCommand({
+  //   Bucket: configs.BUCKET_NAME,
+  //   Key: filename,
+  // });
+  // const url = await getSignedUrl(AWS_S3, cmd, { expiresIn: 3600 });
+  return `${configs.CLOUD_FRONT_URL}/${filename}`;
 };
 export const deleteFile = async (filename: string) => {
   const cmd = new DeleteObjectCommand({
