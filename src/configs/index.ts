@@ -12,6 +12,7 @@ const configs = {
   AWS_ACCESS_KEY: `${process.env.AWS_ACCESS_KEY}`,
   AWS_SECRET_KEY: `${process.env.AWS_SECRET_KEY}`,
   CLOUD_FRONT_URL: `${process.env.CLOUD_FRONT_URL}`,
+  CLOUD_FRONT_DISTRIBUTION_ID: `${process.env.CLOUD_FRONT_DISTRIBUTION_ID}`,
 };
 
 export default configs;

@@ -39,7 +39,6 @@ const Create: RequestHandler = async (req, res) => {
       name: req.body.name,
       image: imageName,
     }).save();
-    console.log(category);
     res.status(201).json({
       msg: "Created Successfully",
       isSuccess: true,
@@ -63,6 +62,7 @@ const Update: RequestHandler = async (req, res) => {
         buffer: file.buffer,
         filename: category?.image!,
         mimetype: file.mimetype,
+        isUpdatingFile: true,
       });
     }
     await category?.updateOne({ name }, { new: true });
@@ -82,7 +82,6 @@ const Delete: RequestHandler = async (req, res) => {
     const { _id } = req.params;
     const category = await Category.findById(_id);
     await deleteFile(category?.image!);
-    console.log(category?.image);
     await category?.deleteOne();
     res.status(200).json({
       msg: "Deleted Successfully",
